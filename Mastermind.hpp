@@ -73,21 +73,19 @@ private:
 
   struct CorrectPinFinder {
     CorrectPinFinder(const std::string& input, const std::string& solution)
-        : input(input), solution(solution) {}
-    int operator()(char c) const {
-      return std::min(std::count(input.begin(), input.end(), c),
-                      std::count(solution.begin(), solution.end(), c));
+        : input(input), solution(solution)
+    {}
+    int operator()(int i, char c) const {
+      return i + std::min(std::count(input.begin(), input.end(), c),
+                          std::count(solution.begin(), solution.end(), c));
     }
     std::string input;
     std::string solution;
   };
 
   void checkIncorrectlyPlacedItems(const std::string& input) const {
-    unsigned num = 0;
-    for(std::string::const_iterator it = m_pins.begin(); it < m_pins.end(); ++it) {
-      num += std::min(std::count(input.begin(), input.end(), *it),
-                      std::count(m_solution.begin(), m_solution.end(), *it));
-    }
+    unsigned num = std::accumulate(m_pins.begin(), m_pins.end(),
+                                   0, CorrectPinFinder(input, m_solution));
     std::cout << "ColorOK: " << num << std::endl;
   }
 
