@@ -1,11 +1,11 @@
 #ifndef MASTERMIND_HPP_INCLUDED
 #define MASTERMIND_HPP_INCLUDED
 
-#include <cctype>
+#include <cctype> /* toupper */
 #include <string>
-#include <algorithm>
-#include <numeric>
-#include <functional>
+#include <algorithm> /* count, find_if, min */
+#include <numeric> /* accumulate, inner_product*/
+#include <functional> /* plus, equal_to */
 
 #include <iostream>
 
@@ -26,7 +26,7 @@ public:
   }
 
   void guess(std::string input) {
-    std::transform(input.begin(), input.end(), input.begin(), toupper);
+    std::transform(input.begin(), input.end(), input.begin(), std::toupper);
 
     if(!isInputValid(input)) {
       std::cout << "INVALID INPUT!" << std::endl;
@@ -37,9 +37,9 @@ public:
     if(correct == SLOTS) {
       throw GameOver(GameOver::WON);
     }
-    std::cout << "Correct: " << correct << " ColorOK: " << countCorrectColorPins(input) << std::endl;
+    std::cout << "OK: " << correct << " Color OK: " << countCorrectColorPins(input) << std::endl;
 
-    if(++m_numberOfGuesses == MAX_NUMBER_OF_GUESSES) { /// Move check up or invalidate object
+    if(++m_numberOfGuesses == MAX_NUMBER_OF_GUESSES) {
       throw GameOver(GameOver::LOST);
     }
   }
@@ -66,8 +66,8 @@ private:
                               0, std::plus<int>(), std::equal_to<char>());
   }
 
-  struct CorrectPinFinder {
-    CorrectPinFinder(const std::string& input, const std::string& solution)
+  struct CorrectColorFinder {
+    CorrectColorFinder(const std::string& input, const std::string& solution)
         : input(input), solution(solution)
     {}
     int operator()(int i, char c) const {
@@ -79,7 +79,7 @@ private:
   };
 
   unsigned countCorrectColorPins(const std::string& input) const {
-    return std::accumulate(m_pins.begin(), m_pins.end(), 0, CorrectPinFinder(input, m_solution));
+    return std::accumulate(m_pins.begin(), m_pins.end(), 0, CorrectColorFinder(input, m_solution));
   }
 
   const std::string m_solution;
