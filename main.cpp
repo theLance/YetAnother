@@ -18,16 +18,24 @@ int main()
   m.guess("rrbg"); // 3 - 3
   m.guess("rbrg"); // 2 - 3
   m.guess("gbgr"); // 0 - 4
-  m.guess("RGBG"); // 4 - 4 - WON  m.guess("rrb1"); //invalid
+  m.guess("RGBG"); // 4 - 4 - WON
 
   ASSERT_EQ(false, m.isInputValid("rgbt"));
   ASSERT_EQ(false, m.isInputValid("RGBT"));
   ASSERT_EQ(false, m.isInputValid("RGB1"));
   ASSERT_EQ(true, m.isInputValid("RGBB"));
 
-  ASSERT_EQ(3, m.countCorrectlyPlacedSlots("RRBG")); // 3 - 3
-  ASSERT_EQ(2, m.countCorrectlyPlacedSlots("RBRG")); // 2 - 3
-  ASSERT_EQ(0, m.countCorrectlyPlacedSlots("GBGR")); // 0 - 4
-  ASSERT_EQ(4, m.countCorrectlyPlacedSlots("RGBG")); // 4 - 4 - WON
+  ASSERT_EQ(3, m.countCorrectlyPlacedPins("RRBG")); // 3 - 3
+  ASSERT_EQ(3, m.countCorrectColorPins("RRBG")); // 3 - 3
+
+  ASSERT_EQ(2, m.countCorrectlyPlacedPins("RBRG")); // 2 - 3
+  ASSERT_EQ(3, m.countCorrectColorPins("RBRG")); // 2 - 3
+
+  ASSERT_EQ(0, m.countCorrectlyPlacedPins("GBGR")); // 0 - 4
+  ASSERT_EQ(4, m.countCorrectColorPins("GBGR")); // 0 - 4
+
+  ASSERT_EQ(4, m.countCorrectlyPlacedPins("RGBG")); // 4 - 4 - WON
+  ASSERT_EQ(4, m.countCorrectColorPins("RGBG")); // 4 - 4 - WON
+
   return 0;
 }

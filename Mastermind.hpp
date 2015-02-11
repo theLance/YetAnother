@@ -30,10 +30,12 @@ public:
       return;
     }
 
-    checkCorrectlyPlacedItems(input); /// should throw
-
-    // matches with wrong place
-    checkIncorrectlyPlacedItems(input);
+    unsigned correct = countCorrectlyPlacedPins(input);
+    if(correct == SLOTS) {
+      std::cout << "You won!" << std::endl;
+      return;
+    }
+    std::cout << "Correct: " << correct << " ColorOK: " << countCorrectColorPins(input) << std::endl;
 
     if(++m_numberOfGuesses == MAX_NUMBER_OF_GUESSES) { /// Move check up or invalidate object
       std::cout << "You lost" << std::endl;
@@ -57,18 +59,9 @@ private:
            std::find_if(input.begin(), input.end(), InvalidCharFinder(m_pins)) == input.end();
   }
 
-  unsigned countCorrectlyPlacedSlots(const std::string& input) const {
+  unsigned countCorrectlyPlacedPins(const std::string& input) const {
     return std::inner_product(input.begin(), input.end(), m_solution.begin(),
                               0, std::plus<int>(), std::equal_to<char>());
-  }
-
-  void checkCorrectlyPlacedItems(const std::string& input) const {
-    unsigned correct = countCorrectlyPlacedSlots(input);
-    if(correct == SLOTS) {
-      std::cout << "You won!" << std::endl; /// Throw some gameover exc
-      return;
-    }
-    std::cout << "Correct: " << correct << " - ";
   }
 
   struct CorrectPinFinder {
@@ -83,10 +76,8 @@ private:
     std::string solution;
   };
 
-  void checkIncorrectlyPlacedItems(const std::string& input) const {
-    unsigned num = std::accumulate(m_pins.begin(), m_pins.end(),
-                                   0, CorrectPinFinder(input, m_solution));
-    std::cout << "ColorOK: " << num << std::endl;
+  unsigned countCorrectColorPins(const std::string& input) const {
+    return std::accumulate(m_pins.begin(), m_pins.end(), 0, CorrectPinFinder(input, m_solution));
   }
 
   const std::string m_solution;
