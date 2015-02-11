@@ -7,9 +7,12 @@
 #include <numeric>
 #include <functional>
 
-
 #include <iostream>
 
+struct GameOver {
+  enum Outcome { WON, LOST } outcome;
+  GameOver(Outcome outcome) : outcome(outcome) {}
+};
 
 class Mastermind {
   static const unsigned char SLOTS = 4;
@@ -32,13 +35,12 @@ public:
 
     unsigned correct = countCorrectlyPlacedPins(input);
     if(correct == SLOTS) {
-      std::cout << "You won!" << std::endl;
-      return;
+      throw GameOver(GameOver::WON);
     }
     std::cout << "Correct: " << correct << " ColorOK: " << countCorrectColorPins(input) << std::endl;
 
     if(++m_numberOfGuesses == MAX_NUMBER_OF_GUESSES) { /// Move check up or invalidate object
-      std::cout << "You lost" << std::endl;
+      throw GameOver(GameOver::LOST);
     }
   }
 

@@ -18,7 +18,11 @@ int main()
   m.guess("rrbg"); // 3 - 3
   m.guess("rbrg"); // 2 - 3
   m.guess("gbgr"); // 0 - 4
+  try {
   m.guess("RGBG"); // 4 - 4 - WON
+  } catch(GameOver& go) {
+    ASSERT_EQ(GameOver::WON, go.outcome);
+  }
 
   ASSERT_EQ(false, m.isInputValid("rgbt"));
   ASSERT_EQ(false, m.isInputValid("RGBT"));
