@@ -2,6 +2,7 @@
 #define MASTERMIND_HPP_INCLUDED
 
 #include <cctype> /* toupper */
+#include <cstdlib> /* rand */
 #include <string>
 #include <algorithm> /* count, find_if, min */
 #include <numeric> /* accumulate, inner_product*/
@@ -19,14 +20,14 @@ class Mastermind {
   static const unsigned char MAX_NUMBER_OF_GUESSES = 20; // check whether that's true
 
 public:
-  Mastermind() : m_solution(generateSolution())
+  Mastermind() : m_pins("RGB")
                , m_numberOfGuesses(0)
-               , m_pins("RGB")
+               , m_solution(generateSolution())
   {
   }
 
   void guess(std::string input) {
-    std::transform(input.begin(), input.end(), input.begin(), std::toupper);
+    std::transform(input.begin(), input.end(), input.begin(), toupper);
 
     if(!isInputValid(input)) {
       std::cout << "INVALID INPUT!" << std::endl;
@@ -46,8 +47,11 @@ public:
 
 private:
   std::string generateSolution() const {
-    /// GENERATE
-    return "RGBG"; /// TEMP TO COMPILE
+    std::string solution;
+    for(unsigned i = 0; i < SLOTS; ++i) {
+      solution.push_back(m_pins[std::rand() % m_pins.size()]);
+    }
+    return solution;
   }
 
   struct InvalidCharFinder {
@@ -82,9 +86,9 @@ private:
     return std::accumulate(m_pins.begin(), m_pins.end(), 0, CorrectColorFinder(input, m_solution));
   }
 
-  const std::string m_solution;
-  unsigned          m_numberOfGuesses;
   const std::string m_pins;
+  unsigned          m_numberOfGuesses;
+  const std::string m_solution;
 };
 
 

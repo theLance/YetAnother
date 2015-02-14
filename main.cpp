@@ -14,6 +14,10 @@ void doAssertion(T a, U b, std::size_t line) {
 int main()
 {
   Mastermind m;
+  std::string forcedSolution("RGBG");
+  std::string& solRef = const_cast<std::string&>(m.m_solution);
+  solRef = forcedSolution;
+
   m.guess("rrb1"); //invalid
   m.guess("rrbg"); // 3 - 3
   m.guess("rbrg"); // 2 - 3
